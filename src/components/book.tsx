@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import {Loading} from './Loading';
+import { Loading } from "./Loading";
 import { useLocation } from "react-router-dom";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import "./styles/styles.module.css";
-import { margin } from "@mui/system";
+import Paper from "@mui/material/Paper";
+import { MenuList } from "@mui/material";
 const Details = () => {
-
   const [display, setDisplay] = useState("block");
   const [id, setId] = useState("");
   const [a, setA] = useState("");
@@ -18,40 +18,55 @@ const Details = () => {
   const search = useLocation().search;
   const poke = search.slice(1);
   console.log(poke);
-  
-  axios.get(`https://pokeapi.co/api/v2/pokemon/${poke}`).then((res) => {
 
+  axios.get(`https://pokeapi.co/api/v2/pokemon/${poke}`).then((res) => {
     console.log(res);
     setA(res.data.sprites.other["official-artwork"].front_default);
     setType(res.data.types[0].type.name);
     setId(res.data.id);
-    setWeight(res.data.weight);
-    setHeight(res.data.height);
+    const Wei: any = res.data.weight / 10;
+    setWeight(Wei);
+    const Hei: any = res.data.height * 10;
+    setHeight(Hei);
     setDisplay("none");
     console.log(display);
   });
 
   return (
     <>
-      <Box
-      textAlign="center"
-      position="relative">
-      <CircularProgress 
-      size="200px"
-      
-      sx={{ position:"absolute",
-            display:{display},
-            margin:"200px",
-            marginLeft:"600px"
-          }} />
-      <img src={a} alt="pokemon" />
-      <p>pokemonID　:　{id}</p>
-      <p>type　:　{type}</p>
-      <p>weight　:　{weight}</p>
-      <p>height　:　{height}</p>
-      </Box>
+      <Paper
+        elevation={8}
+        sx={{
+          height: "600px",
+          width: "600px",
+          margin: "30px auto",
+          paddingtop: "20px",
+        }}
+      >
+        <Box position="relative">
+          <CircularProgress
+            size="100px"
+            color="success"
+            sx={{
+              position: "absolute",
+              display: { display },
+              margin: "200px",
+              ml: "240px",
+            }}
+          />
+          <img src={a} alt="pokemon" />
+          <h3>Name　:　{poke}</h3>
+          <p>pokemonID　:　{id}</p>
+          <p>type　:　{type}</p>
+          <p>weight　:　{weight}　kg</p>
+          <p>height　:　{height}　cm</p>
+          <Button href="/top" variant="contained" color="success">
+            Back
+          </Button>
+        </Box>
+      </Paper>
     </>
   );
 };
 export default Details;
-export {} 
+export {};
