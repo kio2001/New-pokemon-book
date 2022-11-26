@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import { Loading } from "./Loading";
 import { useLocation } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./styles/styles.module.css";
@@ -17,9 +16,16 @@ const Details = () => {
   const [height, setHeight] = useState("");
   const search = useLocation().search;
   const poke = search.slice(1);
-  console.log(poke);
 
-  axios.get(`https://pokeapi.co/api/v2/pokemon/${poke}`).then((res) => {
+  console.log(poke);
+  function sleep(time: any) {
+    return new Promise(function (resolve, reject) {
+      window.setTimeout(resolve, time);
+    });
+  }
+
+  axios.get(`https://pokeapi.co/api/v2/pokemon/${poke}`).then(async (res) => {
+    await sleep(2000);
     console.log(res);
     setA(res.data.sprites.other["official-artwork"].front_default);
     setType(res.data.types[0].type.name);
